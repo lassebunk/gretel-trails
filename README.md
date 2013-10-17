@@ -52,7 +52,7 @@ When you want to invisibly add the current trail when the user clicks a link, yo
 
 Trails are now transferred invisibly to the next page when the user clicks a link.
 
-See Customization below for info on changing this selector.
+See Customization below for info on changing the `.js-append-trail` selector.
 
 ## Customization
 
