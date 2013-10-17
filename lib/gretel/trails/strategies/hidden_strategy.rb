@@ -47,3 +47,11 @@ Gretel::Renderer.class_eval do
 
   alias_method_chain :link_to, :hidden_trail
 end
+
+ActionView::Base.class_eval do
+  # View helper proxy to the breadcrumb renderer's link_to that automatically
+  # removes trails from URLs and adds them as data attributes.
+  def breadcrumb_link_to(name, url, options = {})
+    gretel_renderer.link_to(name, url, options)
+  end unless method_defined?(:breadcrumb_link_to)
+end

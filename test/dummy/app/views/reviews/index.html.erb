@@ -5,3 +5,9 @@
 <p>
   No reviews.
 </p>
+
+<div id="back">
+  <% parent_breadcrumb do |parent| %>
+    <%= breadcrumb_link_to "Back", parent.url %>
+  <% end %>
+</div>

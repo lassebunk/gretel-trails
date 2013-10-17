@@ -42,4 +42,26 @@ class GretelTrailsTest < ActionDispatch::IntegrationTest
     all(".breadcrumbs a").last.click
     assert_equal "/products/recent", current_fullpath
   end
+
+  test "breadcrumb_link_to" do
+    visit "/products/recent"
+
+    within "#products" do
+      click_link "Product One"
+    end
+
+    click_link "See reviews"
+
+    within "#back" do
+      click_link "Back"
+    end
+
+    assert_equal "/products/one", current_fullpath
+
+    within "#back" do
+      click_link "Back"
+    end
+
+    assert_equal "/products/recent", current_fullpath
+  end
 end

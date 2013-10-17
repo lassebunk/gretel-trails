@@ -9,3 +9,9 @@
 <p>
   The product description would go here.
 </p>
+
+<div id="back">
+  <% parent_breadcrumb do |parent| %>
+    <%= breadcrumb_link_to "Back", parent.url %>
+  <% end %>
+</div>
