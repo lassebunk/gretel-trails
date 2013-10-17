@@ -54,7 +54,15 @@ When you want to invisibly add the current trail when the user clicks a link, yo
 
 Trails are now transferred invisibly to the next page when the user clicks a link.
 
-See Customization below for info on changing the `.js-append-trail` selector.
+See [Customization](#customization) below for info on changing the `.js-append-trail` selector.
+
+If for some reason you want to add the trail directly on a link without the JS selector, you can do so:
+
+```erb
+<%= link_to "My Link", my_link_path, data: { trail: breadcrumb_trail } %>
+```
+
+See [Customization](#customization) below for info on changing the `data-trail` attribute to something else.
 
 ### Custom links
 
