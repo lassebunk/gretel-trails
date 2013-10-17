@@ -9,6 +9,7 @@ end
 # Remove trail from querystring
 removeTrailFromUrl = ->
   if history.replaceState?
+    return if location.href.indexOf("<%= Gretel::Trail.trail_param %>=") is -1
     uri = new Gretel.Trails.Uri(location.href)
     history.replaceState history.state, document.title, uri.deleteQueryParam("<%= Gretel::Trail.trail_param %>")
 
