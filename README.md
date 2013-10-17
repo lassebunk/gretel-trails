@@ -54,6 +54,19 @@ Trails are now transferred invisibly to the next page when the user clicks a lin
 
 See Customization below for info on changing the `.js-append-trail` selector.
 
+### Custom links
+
+Inside breadcrumbs, the links are automatically transformed with trails removed from the URLs and applied as data attributes instead.
+If you want to do custom breadcrumb links with these changes applied, you can use the `breadcrumb_link_to` helper:
+
+```erb
+<% parent_breadcrumb do |parent| %>
+  <%= breadcrumb_link_to "Back to #{parent.text}", parent.url %>
+<% end %>
+```
+
+The link will now have a URL without the trail param and `data-trail` containing the trail.
+
 ## Customization
 
 ### JS selector
