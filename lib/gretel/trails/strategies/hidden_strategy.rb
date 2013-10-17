@@ -29,7 +29,7 @@ end
 
 Gretel::Renderer.class_eval do
   # Moves the trail from the querystring into a data attribute.
-  def render_link_with_hidden_trail(name, url, options = {})
+  def link_to_with_hidden_trail(name, url, options = {})
     if url.include?("#{Gretel::Trail.trail_param}=")
       uri = URI.parse(url)
       query_hash = Hash[CGI.parse(uri.query.to_s).map { |k, v| [k, v.first] }]
@@ -42,8 +42,8 @@ Gretel::Renderer.class_eval do
       uri.query = query_hash.to_query.presence
       url = uri.to_s
     end
-    render_link_without_hidden_trail(name, url, options)
+    link_to_without_hidden_trail(name, url, options)
   end
 
-  alias_method_chain :render_link, :hidden_trail
+  alias_method_chain :link_to, :hidden_trail
 end
