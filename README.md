@@ -58,7 +58,7 @@ See Customization below for info on changing this selector.
 
 ### JS selector
 
-If you want to customize the JS selector, you can do so in an initializer:
+If you want to customize the JS selector (the default is `.js-append-trail`), you can do so in an initializer:
 
 ```ruby
 Gretel::Trails::HiddenStrategy.js_selector = ".my-other-selector"
