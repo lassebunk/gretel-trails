@@ -1,0 +1,11 @@
+<% breadcrumb :product, @product %>
+
+<h1><%= @product.name %></h1>
+
+<p>
+  <%= link_to "See reviews", product_reviews_path(@product), class: "js-append-trail" %>
+</p>
+
+<p>
+  The product description would go here.
+</p>

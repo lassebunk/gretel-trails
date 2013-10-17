@@ -1,0 +1,9 @@
+<% breadcrumb :recent_products %>
+
+<h1>Recent Products</h1>
+
+<ul id="products">
+  <% @products.each do |product| %>
+    <li><%= link_to product.name, product, class: "js-append-trail" %></li>
+  <% end %>
+</ul>

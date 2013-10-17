@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: Product One
+  slug: one
+  category: one
+
+two:
+  name: Product Two
+  slug: two
+  category: two

@@ -1,0 +1,31 @@
+//= require gretel.trails.jsuri
+
+<%
+unless defined?(Gretel::Trails::HiddenStrategy)
+  raise "Gretel::Trails::HiddenStrategy` was not found. Please add `Gretel::Trails.strategy = :hidden` to an initializer."
+end
+%>
+
+# Remove trail from querystring
+removeTrailFromUrl = ->
+  if history.replaceState?
+    uri = new Gretel.Trails.Uri(location.href)
+    history.replaceState history.state, document.title, uri.deleteQueryParam("<%= Gretel::Trail.trail_param %>")
+
+# Remove trail on load
+removeTrailFromUrl()
+
+if Turbolinks?
+  # Remove trail after page change
+  $(document).on "page:change", -> removeTrailFromUrl()
+
+# Add trails to querystring
+$ ->
+  $("body").on "click", "[data-<%= Gretel::Trails::HiddenStrategy.data_attribute %>], <%= Gretel::Trails::HiddenStrategy.js_selector %>", ->
+    if trail = $(this).data("<%= Gretel::Trails::HiddenStrategy.data_attribute %>") || $("body").data("<%= Gretel::Trails::HiddenStrategy.data_attribute %>")
+      href = $(this).attr("href")
+      uri = new Gretel.Trails.Uri(href)
+      href = uri.deleteQueryParam("<%= Gretel::Trail.trail_param %>").addQueryParam("<%= Gretel::Trail.trail_param %>", trail)
+      $(this).attr("href", href)
+    else
+      console?.log "[Gretel] No `data-<%= Gretel::Trails::HiddenStrategy.data_attribute %>` was found on the <body> tag or the link you just clicked.\nPlease set it using the `breadcrumb_trail` helper or see the Gretel::Trails readme for more info."

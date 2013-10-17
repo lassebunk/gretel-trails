@@ -1,0 +1,9 @@
+<% breadcrumb :category, @category %>
+
+<h1><%= @category.name %></h1>
+
+<ul id="products">
+  <% @category.products.each do |product| %>
+    <li><%= link_to product.name, product %></li>
+  <% end %>
+</ul>
