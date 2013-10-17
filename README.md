@@ -42,7 +42,7 @@ For older browsers it falls back gracefully to showing trails in the URL, as spe
 
 ## Usage
 
-When you want to invisibly add the trail when the user clicks a link, you add a special JS selector to the link where you want the trail added on click:
+When you want to invisibly add the current trail when the user clicks a link, you add a special JS selector to the link where you want the trail added on click:
 
 ```erb
 <% @products.each do |product| %>
