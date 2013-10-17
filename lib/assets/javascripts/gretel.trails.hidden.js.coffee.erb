@@ -28,4 +28,4 @@ $ ->
       href = uri.deleteQueryParam("<%= Gretel::Trail.trail_param %>").addQueryParam("<%= Gretel::Trail.trail_param %>", trail)
       $(this).attr("href", href)
     else
-      console?.log "[Gretel] No `data-<%= Gretel::Trails::HiddenStrategy.data_attribute %>` was found on the <body> tag or the link you just clicked.\nPlease set it using the `breadcrumb_trail` helper or see the Gretel::Trails readme for more info."
+      console?.log "[Gretel] No `data-<%= Gretel::Trails::HiddenStrategy.data_attribute %>` was found on the <body> tag or the link you just clicked. Please set it using the `breadcrumb_trail` helper or see the Gretel::Trails readme for more info."
