@@ -38,7 +38,7 @@ And finally, at the bottom of *app/assets/javascripts/application.js*:
 Note: If you use [Turbolinks](https://github.com/rails/turbolinks), it's important that you add the require *after* you require Turbolinks. Else it won't work.
 
 Breadcrumb trails are now hidden from the user so they don't see them in URLs. It uses data attributes and `history.replaceState` to transfer the trails.
-For older browsers it falls back gracefully to showing trails in the URL, as specified by `Gretel::Trail.trail_param`.
+For older browsers it falls back gracefully to showing trails in the URL, as specified by `Gretel.trail_param`.
 
 ## Usage
 
@@ -81,7 +81,7 @@ That's it. :)
 The trail param that's hidden from the user is `params[:trail]` by default. You can change this in an initializer:
 
 ```ruby
-Gretel::Trail.trail_param = :other_param
+Gretel.trail_param = :other_param
 ```
 
 ## Requirements
