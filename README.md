@@ -1,3 +1,5 @@
+[![Build Status](https://secure.travis-ci.org/lassebunk/gretel-trails.png)](http://travis-ci.org/lassebunk/gretel-trails)
+
 # Gretel::Trails
 
 Gretel::Trails makes it easy to hide [Gretel](https://github.com/lassebunk/gretel) breadcrumb trails from the user, so they don't see them in URLs when navigating your site.
