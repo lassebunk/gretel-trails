@@ -1,5 +1,5 @@
 module Gretel
-  module Trail
+  module Trails
     class RedisStore < Store
       class << self
         # Options to connect to Redis.

@@ -12,7 +12,7 @@ module Gretel
     desc "Creates an initializer with trail secret"
     def create_initializer
       initializer "gretel.rb" do
-        %{Gretel::Trail::UrlStore.secret = '#{SecureRandom.hex(64)}'}
+        %{Gretel::Trails::UrlStore.secret = '#{SecureRandom.hex(64)}'}
       end
     end
   end

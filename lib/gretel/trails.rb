@@ -31,17 +31,17 @@ module Gretel
       alias_method :strategy=, :strategies=
 
       # Gets the store that is used to encode and decode trails.
-      # Default: +Gretel::Trail::UrlStore+
+      # Default: +Gretel::Trails::UrlStore+
       def store
         @store ||= UrlStore
       end
 
       # Sets the store that is used to encode and decode trails.
-      # Can be a subclass of +Gretel::Trail::Store+, or a symbol: +:url+, +:db+, or +:redis+.
+      # Can be a subclass of +Gretel::Trails::Store+, or a symbol: +:url+, +:db+, or +:redis+.
       def store=(value)
         if value.is_a?(Symbol)
           klass = STORES[value]
-          raise ArgumentError, "Unknown Gretel::Trail.store #{value.inspect}. Use any of #{STORES.inspect}." unless klass
+          raise ArgumentError, "Unknown Gretel::Trails.store #{value.inspect}. Use any of #{STORES.inspect}." unless klass
           self.store = klass
         else
           @store = value
@@ -68,6 +68,12 @@ module Gretel
       # Not all stores support counting keys, and will raise an exception if they don't.
       def count
         store.key_count
+      end
+
+      # Deletes all trails in the store.
+      # Not all stores support deleting trails, and will raise an exception if they don't.
+      def delete_all
+        store.delete_all_keys
       end
 
       # Name of trail param. Default: +:trail+.

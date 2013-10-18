@@ -14,14 +14,4 @@ class TrailsTest < ActiveSupport::TestCase
       Gretel::Trails.store = :xx
     end
   end
-
-  test "setting store options on main module" do
-    assert_equal :trail, Gretel.trail_param
-    Gretel.trail_param = :other_param
-    assert_equal :other_param, Gretel::Trail.trail_param
-
-    assert_equal Gretel::Trails::UrlStore, Gretel::Trails.trail_store
-    Gretel.trail_store = :redis
-    assert_equal Gretel::Trails::RedisStore, Gretel::Trail.store
-  end
 end

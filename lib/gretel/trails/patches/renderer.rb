@@ -2,7 +2,7 @@ Gretel::Renderer.class_eval do
   # Loads parent links from trail if +params[:trail]+ is present.
   def parent_links_for_with_trail(crumb)
     if params[Gretel::Trails.trail_param].present?
-      Gretel::Trails.decode(params[Gretel::Trail.trail_param])
+      Gretel::Trails.decode(params[Gretel::Trails.trail_param])
     else
       parent_links_for_without_trail(crumb)
     end
@@ -12,6 +12,6 @@ Gretel::Renderer.class_eval do
 
   # Returns encoded trail for the breadcrumb.
   def trail
-    @trail ||= Gretel::Trail.encode(links)
+    @trail ||= Gretel::Trails.encode(links)
   end
 end

@@ -1,3 +1,3 @@
-require "patches/gretel"
-require "patches/renderer"
-require "patches/view_helpers"
+require "gretel/trails/patches/gretel"
+require "gretel/trails/patches/renderer"
+require "gretel/trails/patches/view_helpers"

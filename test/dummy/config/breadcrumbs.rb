@@ -2,6 +2,10 @@ crumb :root do
   link "Home", root_path
 end
 
+crumb :about do
+  link "About", about_path
+end
+
 crumb :category do |category|
   link category.name, category
 end

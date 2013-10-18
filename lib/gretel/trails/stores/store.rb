@@ -1,5 +1,5 @@
 module Gretel
-  module Trail
+  module Trails
     class Store
       class << self
         # Save an encoded array to the store. It must return the trail key that
@@ -22,6 +22,11 @@ module Gretel
         # Gets the number of stored trail keys.
         def key_count
           raise "#{name} doesn't support counting trail keys."
+        end
+
+        # Deletes all stored trail keys.
+        def delete_all_keys
+          raise "#{name} doesn't support deleting all trail keys."
         end
 
         # Encode array of +links+ to unique trail key.

@@ -11,6 +11,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 require "capybara/rails"
 require "capybara-webkit"
+require "timecop"
 
 class ActionDispatch::IntegrationTest
   # Make the Capybara DSL available in all integration tests

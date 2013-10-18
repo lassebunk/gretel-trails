@@ -1,5 +1,5 @@
 module Gretel
-  module Trail
+  module Trails
     class ActiveRecordStore < Store
       class << self
         # Number of seconds to keep the trails in the database.
@@ -32,6 +32,11 @@ module Gretel
         # Gets the number of trails stored in the database.
         def key_count
           GretelTrail.count
+        end
+
+        # Deletes all trails stored in the database.
+        def delete_all_keys
+          GretelTrail.delete_all
         end
       end
       

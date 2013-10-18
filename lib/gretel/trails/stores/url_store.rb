@@ -1,5 +1,5 @@
 module Gretel
-  module Trail
+  module Trails
     class UrlStore < Store
       class << self
         # Secret used for crypting trail in URL that should be set to something
