@@ -30,10 +30,10 @@ end
 Gretel::Renderer.class_eval do
   # Moves the trail from the querystring into a data attribute.
   def link_to_with_hidden_trail(name, url, options = {})
-    if url.include?("#{Gretel.trail_param}=")
+    if url.include?("#{Gretel::Trails.trail_param}=")
       uri = URI.parse(url)
       query_hash = Hash[CGI.parse(uri.query.to_s).map { |k, v| [k, v.first] }]
-      trail = query_hash.delete(Gretel.trail_param.to_s)
+      trail = query_hash.delete(Gretel::Trails.trail_param.to_s)
 
       options = options.dup
       options[:data] ||= {}

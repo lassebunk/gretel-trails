@@ -2,7 +2,11 @@
 
 # Gretel::Trails
 
-Gretel::Trails makes it easy to hide [Gretel](https://github.com/lassebunk/gretel) breadcrumb trails from the user, so they don't see them in URLs when navigating your site.
+Gretel::Trails makes it possible to set [Gretel](https://github.com/lassebunk/gretel) breadcrumb trails via the URL – `params[:trail]`.
+This makes it possible to link back to a different breadcrumb trail than the one specified in your breadcrumb, for example if you have a
+store with products that have a default parent to their category, but when visiting from the reviews section, you want to link back to the reviews instead.
+
+You can also hide trails from the user using the `:hidden` strategy, so they don't see them in URLs when navigating your site. See below for more info.
 
 ## Installation
 
@@ -18,7 +22,43 @@ And run:
 $ bundle
 ```
 
-In an initializer, e.g. *config/initializers/gretel.rb*:
+Gretel::Trails has different stores that are used to serialize and deserialize the trails for use in URLs.
+
+The default store is the URL store that encodes trails directly in the URL. Note that a trail stored in the URL can get very long, so the recommended way is to use the database or Redis store. See [Stores](#stores) below for more info.
+
+In order to use the URL store, you must set a secret that's used to prevent cross-site scripting attacks. In an initializer, e.g. *config/initializers/gretel.rb*:
+
+```
+Gretel::Trails::UrlStore.secret = 'your_key_here' # Must be changed to something else to be secure
+```
+
+You can generate a secret using `SecureRandom.hex(64)` or `rake secret`.
+
+Then you can set the breadcrumb trail:
+
+```erb
+<% breadcrumb :reviews %>
+...
+<% @products.each do |product| %>
+  <%= link_to @product.name, product_path(product, trail: breadcrumb_trail) %>
+<% end %>
+```
+
+The product view will now have the breadcrumb trail from the first page (reviews) instead of its default parent.
+
+## Custom trail param
+
+The default trail param is `params[:trail]`. You can change it in an initializer:
+
+```ruby
+Gretel::Trails.trail_param = :other_param
+```
+
+## Hiding trails in URLs
+
+Gretel::Trails has a `:hidden` strategy that can be used to hide trails in URLs from the user while the server sees them. This is done via data attributes and `history.replaceState` in browsers that support it.
+
+To hide trails, you set the strategy in an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
 Gretel::Trails.strategy = :hidden
@@ -38,11 +78,11 @@ And finally, at the bottom of *app/assets/javascripts/application.js*:
 ```
 
 Breadcrumb trails are now hidden from the user so they don't see them in URLs. It uses data attributes and `history.replaceState` to hide the trails from the URL.
-For older browsers it falls back gracefully to showing trails in the URL, as specified by `Gretel.trail_param`.
+For older browsers it falls back gracefully to showing trails in the URL, as specified by `Gretel::Trails.trail_param`.
 
 Note: If you use [Turbolinks](https://github.com/rails/turbolinks), it's important that you add the require *after* you require Turbolinks. Else it won't work.
 
-## Usage
+### Usage
 
 When you want to invisibly add the current trail when the user clicks a link, you add a special JS selector to the link where you want the trail added on click:
 
@@ -56,7 +96,7 @@ Trails are now transferred invisibly to the next page when the user clicks a lin
 
 See [Customization](#customization) below for info on changing the `.js-append-trail` selector.
 
-If for some reason you want to add the trail directly on a link without the JS selector, you can do so:
+If you need to set the trail directly on a link without the JS selector, you can do so:
 
 ```erb
 <%= link_to "My Link", my_link_path, data: { trail: breadcrumb_trail } %>
@@ -64,7 +104,7 @@ If for some reason you want to add the trail directly on a link without the JS s
 
 See [Customization](#customization) below for info on changing the `data-trail` attribute to something else.
 
-### Custom links
+### Breadcrumb links
 
 Inside breadcrumbs, the links are automatically transformed with trails removed from the URLs and applied as data attributes instead.
 If you want to do custom breadcrumb links with these changes applied, you can use the `breadcrumb_link_to` helper:
@@ -97,14 +137,76 @@ The default trail data attribute for `<body>` and links is `data-trail` but you 
 Gretel::Trails::HiddenStrategy.data_attribute = "other-data-attribute"
 ```
 
-That's it. :)
+`data-` is added automatically, so if for example you want the attribute to be `data-my-attr`, you just set it to `my-attr`.
 
-### Trail param
+## Stores
 
-The trail param that's hidden from the user is `params[:trail]` by default. You can change this in an initializer:
+Gretel::Trails comes with different stores for encoding and decoding trails for use in the URL.
+
+### URL store
+
+The default store is the URL store which is great for simple use, but if you have longer trails, it can get very long.
+
+To use the URL store, set it in an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
-Gretel.trail_param = :other_param
+Gretel::Trails.store = :url # Not really needed as this is the default
+Gretel::Trails::UrlStore.secret = 'your_key_here' # Must be changed to something else to be secure
+```
+
+The secret is used to prevent cross-site scripting attacks. You can generate a secure one using `SecureRandom.hex(64)` or `rake secret`.
+
+### Database store
+
+The database store stores trails in the database so the trail keys have a maximum length of 40 characters (a SHA1 of the trail).
+
+To use the database store, set it an initializer, e.g. *config/initializers/gretel.rb*:
+
+```ruby
+Gretel::Trails.store = :db
+```
+
+You also need to create a migration for the database table that holds the trails:
+
+```bash
+$ rails generate gretel:trails:migration
+```
+
+This creates a table named `gretel_trails` that hold the trails.
+
+ActiveRecord doesn't delete expired records automatically, so to delete expired trails you need to run the following rake task, for example once daily:
+
+```bash
+$ rake gretel:trails:delete_expired
+```
+
+You can also run `Gretel::Trails.delete_expired` directly.
+
+If you need a gem for managing recurring tasks, [Whenever](https://github.com/javan/whenever) is a solution that handles cron jobs via Ruby code.
+
+The default expiration period is 1 day. To set a custom expiration period, in an initializer:
+
+```ruby
+Gretel::Trails::ActiveRecordStore.expires_in = 2.days
+```
+
+### Redis store
+
+If you want to store trails in [Redis](https://github.com/redis/redis), you can use the Redis store.
+
+To use the Redis store, set it in an initializer, e.g. *config/initializers/gretel.rb*:
+
+```ruby
+Gretel::Trails.store = :redis
+Gretel::Trails::RedisStore.connect_options = { host: "10.0.1.1", port: 6380 }
+```
+
+Trails are now stored in Redis and expired automatically after 1 day (by default).
+
+To set a custom expiration period, in an initializer:
+
+```ruby
+Gretel::Trails::RedisStore.expires_in = 2.days
 ```
 
 ## Requirements

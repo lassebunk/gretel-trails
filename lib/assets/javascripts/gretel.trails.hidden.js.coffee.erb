@@ -8,10 +8,10 @@ end
 
 # Remove trail from querystring
 removeTrailFromUrl = ->
-  return if location.href.indexOf("<%= Gretel.trail_param %>=") is -1
+  return if location.href.indexOf("<%= Gretel::Trails.trail_param %>=") is -1
   if history.replaceState?
     uri = new Gretel.Trails.Uri(location.href)
-    history.replaceState history.state, document.title, uri.deleteQueryParam("<%= Gretel.trail_param %>")
+    history.replaceState history.state, document.title, uri.deleteQueryParam("<%= Gretel::Trails.trail_param %>")
 
 # Remove trail on load
 removeTrailFromUrl()
@@ -26,7 +26,7 @@ $ ->
     if trail = $(this).data("<%= Gretel::Trails::HiddenStrategy.data_attribute %>") || $("body").data("<%= Gretel::Trails::HiddenStrategy.data_attribute %>")
       href = $(this).attr("href")
       uri = new Gretel.Trails.Uri(href)
-      href = uri.deleteQueryParam("<%= Gretel.trail_param %>").addQueryParam("<%= Gretel.trail_param %>", trail)
+      href = uri.deleteQueryParam("<%= Gretel::Trails.trail_param %>").addQueryParam("<%= Gretel::Trails.trail_param %>", trail)
       $(this).attr("href", href)
     else
       console?.log "[Gretel] No `data-<%= Gretel::Trails::HiddenStrategy.data_attribute %>` was found on the <body> tag or the link you just clicked. Please set it using the `breadcrumb_trail` helper or see the Gretel::Trails readme for more info."
