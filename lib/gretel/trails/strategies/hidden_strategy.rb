@@ -29,7 +29,7 @@ end
 
 Gretel::Renderer.class_eval do
   # Moves the trail from the querystring into a data attribute.
-  def link_to_with_hidden_trail(name, url, options = {})
+  def breadcrumb_link_to_with_hidden_trail(name, url, options = {})
     if url.include?("#{Gretel::Trails.trail_param}=")
       uri = URI.parse(url)
       query_hash = Hash[CGI.parse(uri.query.to_s).map { |k, v| [k, v.first] }]
@@ -42,16 +42,16 @@ Gretel::Renderer.class_eval do
       uri.query = query_hash.to_query.presence
       url = uri.to_s
     end
-    link_to_without_hidden_trail(name, url, options)
+    breadcrumb_link_to_without_hidden_trail(name, url, options)
   end
 
-  alias_method_chain :link_to, :hidden_trail
+  alias_method_chain :breadcrumb_link_to, :hidden_trail
 end
 
 ActionView::Base.class_eval do
-  # View helper proxy to the breadcrumb renderer's link_to that automatically
-  # removes trails from URLs and adds them as data attributes.
+  # View helper proxy to the breadcrumb renderer's breadcrumb_link_to that
+  # automatically removes trails from URLs and adds them as data attributes.
   def breadcrumb_link_to(name, url, options = {})
-    gretel_renderer.link_to(name, url, options)
+    gretel_renderer.breadcrumb_link_to(name, url, options)
   end unless method_defined?(:breadcrumb_link_to)
 end
