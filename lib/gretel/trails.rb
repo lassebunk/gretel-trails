@@ -84,6 +84,16 @@ module Gretel
       # Sets the trail param.
       attr_writer :trail_param
 
+      # Yields +self+ for configuration.
+      # 
+      #   Gretel::Trails.configure do |config|
+      #     config.store = :db
+      #     config.strategy = :hidden
+      #   end
+      def configure
+        yield self
+      end
+
       # Resets all changes made to +Gretel::Trail+. Used for testing.
       def reset!
         instance_variables.each { |var| remove_instance_variable var }
