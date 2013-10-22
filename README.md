@@ -123,9 +123,9 @@ If you want to do custom breadcrumb links with these changes applied, you can us
 
 The link will now have a URL without the trail param and `data-trail` containing the trail.
 
-## Customization
+### Customization
 
-### JS selector
+#### JS selector
 
 If you want to customize the JS selector (the default is `.js-append-trail`), you can do so in an initializer:
 
@@ -138,7 +138,7 @@ end
 
 It supports all [CSS selectors](http://api.jquery.com/category/selectors/) that you can use in jQuery.
 
-### Data attribute
+#### Data attribute
 
 The default trail data attribute for `<body>` and links is `data-trail` but you can change this in an initializer:
 
