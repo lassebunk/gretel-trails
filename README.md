@@ -29,7 +29,9 @@ The default store is the URL store that encodes trails directly in the URL. Note
 In order to use the URL store, you must set a secret that's used to prevent cross-site scripting attacks. In an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```
-Gretel::Trails::UrlStore.secret = 'your_key_here' # Must be changed to something else to be secure
+Gretel::Trails.configure do |config|
+  config.store.secret = 'your_key_here' # Must be changed to something else to be secure
+end
 ```
 
 You can generate a secret using `SecureRandom.hex(64)` or `rake secret`.
@@ -51,7 +53,9 @@ The product view will now have the breadcrumb trail from the first page (reviews
 The default trail param is `params[:trail]`. You can change it in an initializer:
 
 ```ruby
-Gretel::Trails.trail_param = :other_param
+Gretel::Trails.configure do |config|
+  config.trail_param = :other_param
+end
 ```
 
 ## Hiding trails in URLs
@@ -61,7 +65,9 @@ Gretel::Trails has a `:hidden` strategy that can be used to hide trails in URLs 
 To hide trails, you set the strategy in an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
-Gretel::Trails.strategy = :hidden
+Gretel::Trails.configure do |config|
+  config.strategy = :hidden
+end
 ```
 
 Add a data attribute with the trail to your `<body>` tag, in *application.html.erb*:
@@ -150,8 +156,10 @@ The default store is the URL store which is great for simple use, but if you hav
 To use the URL store, set it in an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
-Gretel::Trails.store = :url # Not really needed as this is the default
-Gretel::Trails::UrlStore.secret = 'your_key_here' # Must be changed to something else to be secure
+Gretel::Trails.configure do |config|
+  config.store = :url # Not really needed as this is the default
+  config.store.secret = 'your_key_here' # Must be changed to something else to be secure
+end
 ```
 
 The secret is used to prevent cross-site scripting attacks. You can generate a secure one using `SecureRandom.hex(64)` or `rake secret`.
@@ -163,7 +171,9 @@ The database store stores trails in the database so the trail keys have a maximu
 To use the database store, set it an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
-Gretel::Trails.store = :db
+Gretel::Trails.configure do |config|
+  config.store = :db
+end
 ```
 
 You also need to create a migration for the database table that holds the trails:
@@ -187,7 +197,10 @@ If you need a gem for managing recurring tasks, [Whenever](https://github.com/ja
 The default expiration period is 1 day. To set a custom expiration period, in an initializer:
 
 ```ruby
-Gretel::Trails::ActiveRecordStore.expires_in = 2.days
+Gretel::Trails.configure do |config|
+  config.store = :db
+  config.store.expires_in = 2.days
+end
 ```
 
 ### Redis store
@@ -197,8 +210,10 @@ If you want to store trails in [Redis](https://github.com/redis/redis), you can 
 To use the Redis store, set it in an initializer, e.g. *config/initializers/gretel.rb*:
 
 ```ruby
-Gretel::Trails.store = :redis
-Gretel::Trails::RedisStore.connect_options = { host: "10.0.1.1", port: 6380 }
+Gretel::Trails.configure do |config|
+  config.store = :redis
+  config.store.connect_options = { host: "10.0.1.1", port: 6380 }
+end
 ```
 
 Trails are now stored in Redis and expired automatically after 1 day (by default).
@@ -206,7 +221,10 @@ Trails are now stored in Redis and expired automatically after 1 day (by default
 To set a custom expiration period, in an initializer:
 
 ```ruby
-Gretel::Trails::RedisStore.expires_in = 2.days
+Gretel::Trails.configure do |config|
+  config.store = :redis
+  config.store.expires_in = 2.days
+end
 ```
 
 ## Requirements

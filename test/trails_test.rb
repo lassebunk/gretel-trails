@@ -11,10 +11,13 @@ class TrailsTest < ActiveSupport::TestCase
 
   test "configuration block" do
     Gretel::Trails.configure do |config|
+      config.store = :url
+      config.store.secret = "1234"
       config.trail_param = :set_from_config
     end
 
     assert_equal :set_from_config, Gretel::Trails.trail_param
+    assert_equal "1234", Gretel::Trails::UrlStore.secret
   end
 
   test "setting invalid store" do
