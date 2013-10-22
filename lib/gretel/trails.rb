@@ -94,7 +94,7 @@ module Gretel
         yield self
       end
 
-      # Resets all changes made to +Gretel::Trail+. Used for testing.
+      # Resets all changes made to +Gretel::Trails+. Used for testing.
       def reset!
         instance_variables.each { |var| remove_instance_variable var }
         STORES.each_value(&:reset!)
