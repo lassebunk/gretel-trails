@@ -22,8 +22,28 @@ module Gretel
 
         # Sets the HTML data attribute.
         attr_writer :data_attribute
+
+        # Resets all changes made to +Gretel::Trails::HiddenStrategy+. Used for testing.
+        def reset!
+          instance_variables.each { |var| remove_instance_variable var }
+        end
       end
     end
+  end
+end
+
+Gretel::Trails.class_eval do
+  class << self
+    def hidden
+      Gretel::Trails::HiddenStrategy
+    end
+
+    def reset_with_hidden!
+      reset_without_hidden!
+      hidden.reset!
+    end
+
+    alias_method_chain :reset!, :hidden
   end
 end
 

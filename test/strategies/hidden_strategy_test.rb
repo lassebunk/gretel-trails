@@ -1,6 +1,22 @@
 require 'test_helper'
 
 class GretelTrailsTest < ActionDispatch::IntegrationTest
+  setup do
+    Gretel.reset!
+    Gretel::Trails.configure do |config|
+      config.store = :db
+      config.strategy = :hidden
+    end
+  end
+
+  test "configuration block" do
+    Gretel::Trails.configure do |config|
+      config.hidden.js_selector = ".test"
+    end
+
+    assert_equal ".test", Gretel::Trails::HiddenStrategy.js_selector
+  end
+
   test "regular breadcrumbs" do
     visit "/categories/one"
 

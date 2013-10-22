@@ -130,7 +130,10 @@ The link will now have a URL without the trail param and `data-trail` containing
 If you want to customize the JS selector (the default is `.js-append-trail`), you can do so in an initializer:
 
 ```ruby
-Gretel::Trails::HiddenStrategy.js_selector = ".my-other-selector"
+Gretel::Trails.configure do |config|
+  config.strategy = :hidden
+  config.hidden.js_selector = ".my-other-selector"
+end
 ```
 
 It supports all [CSS selectors](http://api.jquery.com/category/selectors/) that you can use in jQuery.
@@ -140,7 +143,10 @@ It supports all [CSS selectors](http://api.jquery.com/category/selectors/) that 
 The default trail data attribute for `<body>` and links is `data-trail` but you can change this in an initializer:
 
 ```ruby
-Gretel::Trails::HiddenStrategy.data_attribute = "other-data-attribute"
+Gretel::Trails.configure do |config|
+  config.strategy = :hidden
+  config.hidden.data_attribute = "other-data-attribute"
+end
 ```
 
 `data-` is added automatically, so if for example you want the attribute to be `data-my-attr`, you just set it to `my-attr`.
