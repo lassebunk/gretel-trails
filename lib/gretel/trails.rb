@@ -7,7 +7,7 @@ require "gretel/trails/engine"
 
 module Gretel
   module Trails
-    STORES = {
+    DEFAULT_STORES = {
       url: UrlStore,
       db: ActiveRecordStore,
       redis: RedisStore
@@ -40,12 +40,24 @@ module Gretel
       # Can be a subclass of +Gretel::Trails::Store+, or a symbol: +:url+, +:db+, or +:redis+.
       def store=(value)
         if value.is_a?(Symbol)
-          klass = STORES[value]
-          raise ArgumentError, "Unknown Gretel::Trails.store #{value.inspect}. Use any of #{STORES.inspect}." unless klass
+          klass = available_stores[value]
+          raise ArgumentError, "Unknown Gretel::Trails.store #{value.inspect}. Use any of #{available_stores.inspect}." unless klass
           self.store = klass
         else
           @store = value
         end
+      end
+
+      # Registers a store for use with `Gretel::Trails.store = :key`.
+      #
+      #   Gretel::Trails.register_store :url, UrlStore
+      def register_store(key, klass)
+        available_stores[key] = klass
+      end
+
+      # Hash of registered stores.
+      def available_stores
+        @available_stores ||= DEFAULT_STORES
       end
 
       # Uses the store to encode an array of links to a unique key that can be used in URLs.
@@ -97,7 +109,7 @@ module Gretel
       # Resets all changes made to +Gretel::Trails+. Used for testing.
       def reset!
         instance_variables.each { |var| remove_instance_variable var }
-        STORES.each_value(&:reset!)
+        available_stores.each_value(&:reset!)
       end
     end
   end

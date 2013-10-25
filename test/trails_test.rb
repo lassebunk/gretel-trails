@@ -25,4 +25,13 @@ class TrailsTest < ActiveSupport::TestCase
       Gretel::Trails.store = :xx
     end
   end
+
+  test "register store" do
+    klass = Class.new(Gretel::Trails::Store)
+
+    Gretel::Trails.register_store :test_store, klass
+    Gretel::Trails.store = :test_store
+
+    assert_equal klass, Gretel::Trails.store
+  end
 end
