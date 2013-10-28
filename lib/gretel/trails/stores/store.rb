@@ -2,6 +2,8 @@ module Gretel
   module Trails
     class Store
       class << self
+        include Gretel::Resettable
+  
         # Save an encoded array to the store. It must return the trail key that
         # can later be used to retrieve the array from the store.
         def save(array)
@@ -42,11 +44,6 @@ module Gretel
           else
             []
           end
-        end
-    
-        # Resets all changes made to the store. Used for testing.
-        def reset!
-          instance_variables.each { |var| remove_instance_variable var }
         end
       end
     end

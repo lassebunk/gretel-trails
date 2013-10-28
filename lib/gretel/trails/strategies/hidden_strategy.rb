@@ -5,6 +5,8 @@ module Gretel
       DEFAULT_DATA_ATTRIBUTE = "trail"
 
       class << self
+        include Gretel::Resettable
+
         # jQuery selector for links that should have the trail appended
         # to them on click. Default: +.js-append-trail+
         def js_selector
@@ -22,11 +24,6 @@ module Gretel
 
         # Sets the HTML data attribute.
         attr_writer :data_attribute
-
-        # Resets all changes made to +Gretel::Trails::HiddenStrategy+. Used for testing.
-        def reset!
-          instance_variables.each { |var| remove_instance_variable var }
-        end
       end
     end
   end

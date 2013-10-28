@@ -14,6 +14,8 @@ module Gretel
     }
 
     class << self
+      include Gretel::Resettable
+
       # Activated strategies
       def strategies
         @strategies ||= []
@@ -104,12 +106,6 @@ module Gretel
       #   end
       def configure
         yield self
-      end
-
-      # Resets all changes made to +Gretel::Trails+. Used for testing.
-      def reset!
-        instance_variables.each { |var| remove_instance_variable var }
-        available_stores.each_value(&:reset!)
       end
     end
   end
