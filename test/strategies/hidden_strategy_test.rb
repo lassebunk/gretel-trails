@@ -39,24 +39,24 @@ class GretelTrailsTest < ActionDispatch::IntegrationTest
   end
 
   test "invisibly applying trail" do
-    visit "/products/recent"
+    visit "/products/recent?page=2"
 
     within "#products" do
       click_link "Product One"
     end
     assert_equal "/products/one", current_fullpath
-    assert_equal ["/", "/products/recent"], all(".breadcrumbs a").map { |a| a[:href] }
+    assert_equal ["/", "/products/recent?page=2"], all(".breadcrumbs a").map { |a| a[:href] }
 
     click_link "See reviews"
     assert_equal "/products/one/reviews", current_fullpath
-    assert_equal ["/", "/products/recent", "/products/one"], all(".breadcrumbs a").map { |a| a[:href] }
+    assert_equal ["/", "/products/recent?page=2", "/products/one"], all(".breadcrumbs a").map { |a| a[:href] }
 
     all(".breadcrumbs a").last.click
     assert_equal "/products/one", current_fullpath
-    assert_equal ["/", "/products/recent"], all(".breadcrumbs a").map { |a| a[:href] }
+    assert_equal ["/", "/products/recent?page=2"], all(".breadcrumbs a").map { |a| a[:href] }
 
     all(".breadcrumbs a").last.click
-    assert_equal "/products/recent", current_fullpath
+    assert_equal "/products/recent?page=2", current_fullpath
   end
 
   test "breadcrumb_link_to" do
