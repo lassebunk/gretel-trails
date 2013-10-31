@@ -1,0 +1,11 @@
+<% breadcrumb :about %>
+
+<h1>About</h1>
+
+<%= link_to "Recent products before different trail", recent_products_path, data: { trail: breadcrumb_trail } %>
+
+<% with_breadcrumb_trail :product, Product.find_by_slug("one") do %>
+  <%= link_to "Recent products with different trail", recent_products_path, data: { trail: breadcrumb_trail } %>
+<% end %>
+
+<%= link_to "Recent products after different trail", recent_products_path, data: { trail: breadcrumb_trail } %>
