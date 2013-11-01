@@ -53,6 +53,8 @@ module Gretel
             rec.expires_at = expires_at
             rec.save
           end
+        rescue ActiveRecord::RecordNotUnique
+          retry
         end
 
         def self.delete_expired
